@@ -19,7 +19,6 @@ describe('UsersController (e2e)', () => {
         {
           provide: UserRepository,
           useValue: {
-            // Mock repository methods
             createUser: jest
               .fn()
               .mockImplementation((dto) =>
@@ -30,7 +29,6 @@ describe('UsersController (e2e)', () => {
             findOneById: jest.fn(),
             updateUser: jest.fn(),
             removeUser: jest.fn(),
-            // Add more mocked methods as needed
           },
         },
       ],
@@ -53,20 +51,14 @@ describe('UsersController (e2e)', () => {
         .post('/api/users')
         .send(userData);
       expect(response.status).toBe(HttpStatus.CREATED);
-      // Additional assertions...
     });
-
-    // Add more tests for invalid input, existing user, etc.
   });
 
   describe('GET /api/users', () => {
     it('should return an array of users', async () => {
       const response = await request(app.getHttpServer()).get('/api/users');
       expect(response.status).toBe(HttpStatus.OK);
-      // Additional assertions...
     });
-
-    // Add more tests if needed
   });
   describe('GET /api/users/:id', () => {
     it('should return a user by ID', async () => {
@@ -74,39 +66,34 @@ describe('UsersController (e2e)', () => {
       jest.spyOn(usersService, 'findOne').mockResolvedValue(mockUser);
       const response = await request(app.getHttpServer()).get('/api/users/1');
       expect(response.status).toBe(HttpStatus.OK);
-      // Additional assertions...
     });
-  
+
     it('should throw NotFoundException for a non-existent user', async () => {
       jest.spyOn(usersService, 'findOne').mockResolvedValue(null);
       const response = await request(app.getHttpServer()).get('/api/users/999');
       expect(response.status).toBe(HttpStatus.NOT_FOUND);
     });
-  
-    // Add more tests as needed
   });
-  
+
   describe('PATCH /api/users/:id', () => {
     it('should update a user', async () => {
       const updateUserDto = { name: 'Updated Name' };
-      const response = await request(app.getHttpServer()).patch('/api/users/1').send(updateUserDto);
+      const response = await request(app.getHttpServer())
+        .patch('/api/users/1')
+        .send(updateUserDto);
       expect(response.status).toBe(HttpStatus.OK);
-      // Additional assertions...
     });
-  
-    // Tests for not found, forbidden, invalid input, etc.
   });
-  
+
   describe('DELETE /api/users/:id', () => {
     it('should remove a user', async () => {
-      const response = await request(app.getHttpServer()).delete('/api/users/1');
+      const response = await request(app.getHttpServer()).delete(
+        '/api/users/1',
+      );
       expect(response.status).toBe(HttpStatus.OK);
-      // Additional assertions...
     });
-  
-    // Tests for not found, forbidden, etc.
   });
-  
+
   afterAll(async () => {
     await app.close();
   });

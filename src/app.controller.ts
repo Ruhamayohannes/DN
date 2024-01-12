@@ -74,7 +74,7 @@ export class AppController {
       throw new UnauthorizedException('User not found');
     }
 
-    delete user.password; // Remove password from the response
+    delete user.password;
     return user;
   }
   @Post('logout')

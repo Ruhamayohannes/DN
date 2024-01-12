@@ -48,8 +48,6 @@ describe('UsersController', () => {
         message: 'User created successfully',
       });
     });
-
-    // Add tests for error cases if necessary...
   });
 
   describe('findAll', () => {
@@ -123,8 +121,6 @@ describe('UsersController', () => {
         controller.update('999', {} as UpdateUserDto, mockUser),
       ).rejects.toThrow(new NotFoundException(`User with ID 999 not found`));
     });
-
-    // Additional tests for ForbiddenException if necessary...
   });
 
   describe('remove', () => {
@@ -145,7 +141,5 @@ describe('UsersController', () => {
         new NotFoundException(`User with ID 999 not found`),
       );
     });
-
-    // Additional tests for ForbiddenException if necessary...
   });
 });

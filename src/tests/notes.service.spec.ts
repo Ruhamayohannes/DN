@@ -79,34 +79,47 @@ describe('NoteService', () => {
 
       jest.spyOn(noteRepository, 'findOneById').mockResolvedValueOnce(mockNote);
 
-      await expect(service.findOne(otherUser, mockNote.id)).rejects.toThrow(ForbiddenException);
+      await expect(service.findOne(otherUser, mockNote.id)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
-  
   });
 
   describe('update', () => {
     it('should update a note', async () => {
       jest.spyOn(noteRepository, 'findOneById').mockResolvedValueOnce(mockNote);
-      jest.spyOn(noteRepository, 'save').mockImplementationOnce(async (note: Note) => {
-        return Promise.resolve({ ...note, title: updatedTitle, content: updatedContent });
-      });
-  
+      jest
+        .spyOn(noteRepository, 'save')
+        .mockImplementationOnce(async (note: Note) => {
+          return Promise.resolve({
+            ...note,
+            title: updatedTitle,
+            content: updatedContent,
+          });
+        });
+
       const updatedTitle = 'Updated Title';
       const updatedContent = 'Updated Content';
-      const updatedNote = await service.update(mockUser, mockNote.id, updatedTitle, updatedContent);
-  
+      const updatedNote = await service.update(
+        mockUser,
+        mockNote.id,
+        updatedTitle,
+        updatedContent,
+      );
+
       expect(updatedNote.title).toBe(updatedTitle);
       expect(updatedNote.content).toBe(updatedContent);
     });
-});
+  });
 
-describe('remove', () => {
+  describe('remove', () => {
     it('should remove a note', async () => {
       jest.spyOn(noteRepository, 'findOneById').mockResolvedValueOnce(mockNote);
       jest.spyOn(noteRepository, 'remove').mockResolvedValueOnce(undefined); // Mock the remove method
-  
-      await expect(service.remove(mockUser, mockNote.id)).resolves.not.toThrow();
+
+      await expect(
+        service.remove(mockUser, mockNote.id),
+      ).resolves.not.toThrow();
     });
   });
-
 });

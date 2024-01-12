@@ -1,13 +1,12 @@
-// note/entities/note.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Index } from 'typeorm';
-import { User } from '../../users/entities/user.entity'; 
+import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Index} from 'typeorm';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Note {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 }) // Adjust the length based on your requirements
+  @Column({ length: 100 })
   title: string;
 
   @Column('text')
@@ -18,9 +17,9 @@ export class Note {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
-  
-  @ManyToOne(() => User, user => user.notes, { onDelete: 'CASCADE' })
+
+  @ManyToOne(() => User, (user) => user.notes, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  @Index() 
+  @Index()
   user: User;
 }

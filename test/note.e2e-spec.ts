@@ -1,35 +1,51 @@
 import { chromium, Browser, Page } from 'playwright';
+import { test } from '@jest/globals';
 
-(async () => {
-  const browser: Browser = await chromium.launch();
-  const page: Page = await browser.newPage();
+describe('Note Management E2E Tests', () => {
+  let browser: Browser;
+  let page: Page;
 
-  // User Login
-  await page.goto('https:/localhost:8001/api/login');
-  await page.fill('input[name="username"]', 'testuser');
-  await page.fill('input[name="password"]', 'password');
-  await page.click('button[type="submit"]');
+  beforeAll(async () => {
+    browser = await chromium.launch();
+  });
 
-  // Create a Note
-  await page.goto('https://your-app-url.com/notes');
-  await page.click('button#create-note');
-  await page.fill('textarea#note-content', 'Test Note Content');
-  await page.click('button#save-note');
-  await page.waitForSelector('text=Note created successfully');
+  beforeEach(async () => {
+    page = await browser.newPage();
+  });
 
-  // View the Note
-  await page.click('a#view-note');
-  await page.waitForSelector('text=Test Note Content');
+  afterAll(async () => {
+    await browser.close();
+  });
 
-  // Update the Note
-  await page.click('button#edit-note');
-  await page.fill('textarea#note-content', 'Updated Note Content');
-  await page.click('button#save-note');
-  await page.waitForSelector('text=Note updated successfully');
+  test('User login', async () => {
+    await page.goto('https://localhost:8001/api/login');
+    await page.fill('input[name="username"]', 'testuser');
+    await page.fill('input[name="password"]', 'password');
+    await page.click('button[type="submit"]');
+  });
 
-  // Delete the Note
-  await page.click('button#delete-note');
-  await page.waitForSelector('text=Note deleted successfully');
+  test('Create a note', async () => {
+    await page.goto('https://your-app-url.com/notes');
+    await page.click('button#create-note');
+    await page.fill('textarea#note-content', 'Test Note Content');
+    await page.click('button#save-note');
+    await page.waitForSelector('text=Note created successfully');
+  });
 
-  await browser.close();
-})();
+  test('View a note', async () => {
+    await page.click('a#view-note');
+    await page.waitForSelector('text=Test Note Content');
+  });
+
+  test('Edit a note', async () => {
+    await page.click('button#edit-note');
+    await page.fill('textarea#note-content', 'Updated Note Content');
+    await page.click('button#save-note');
+    await page.waitForSelector('text=Note updated successfully');
+  });
+
+  test('Delete a note', async () => {
+    await page.click('button#delete-note');
+    await page.waitForSelector('text=Note deleted successfully');
+  });
+});

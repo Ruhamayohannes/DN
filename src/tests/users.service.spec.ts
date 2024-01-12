@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users/users.service';
 import { UserRepository } from '../users/users.repository';
-import { CreateUserDto  } from "../users/dto/create-user.dto";
-import {UpdateUserDto} from "../users/dto/update-user.dto";
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
 
@@ -23,7 +23,6 @@ describe('UsersService', () => {
             removeUser: jest.fn(),
             findOneById: jest.fn(),
             find: jest.fn(),
-            // Mock additional repository methods as needed
           },
         },
       ],
@@ -36,13 +35,13 @@ describe('UsersService', () => {
   describe('findOneByEmail', () => {
     it('should return a user for a valid email', async () => {
       const mockUser = new User();
-      jest.spyOn(userRepository, 'findOneByEmail').mockResolvedValueOnce(mockUser);
+      jest
+        .spyOn(userRepository, 'findOneByEmail')
+        .mockResolvedValueOnce(mockUser);
 
       const result = await service.findOneByEmail('example@example.com');
       expect(result).toEqual(mockUser);
     });
-
-    // ... More tests can be added here for different scenarios
   });
 
   describe('create', () => {
@@ -54,8 +53,6 @@ describe('UsersService', () => {
       const result = await service.create(createUserDto);
       expect(result).toEqual(mockUser);
     });
-
-    // ... More tests can be added here for different scenarios
   });
 
   describe('update', () => {
@@ -71,12 +68,14 @@ describe('UsersService', () => {
 
     it('should throw NotFoundException if user not found', async () => {
       const updateUserDto = new UpdateUserDto();
-      jest.spyOn(userRepository, 'findOneById').mockResolvedValueOnce(undefined);
+      jest
+        .spyOn(userRepository, 'findOneById')
+        .mockResolvedValueOnce(undefined);
 
-      await expect(service.update(999, updateUserDto, new User())).rejects.toThrow(NotFoundException);
+      await expect(
+        service.update(999, updateUserDto, new User()),
+      ).rejects.toThrow(NotFoundException);
     });
-
-    // ... More tests can be added here for different scenarios
   });
 
   describe('remove', () => {
@@ -93,10 +92,10 @@ describe('UsersService', () => {
       const nonAdminUser = new User();
       nonAdminUser.role = 'user';
 
-      await expect(service.remove(1, nonAdminUser)).rejects.toThrow(ForbiddenException);
+      await expect(service.remove(1, nonAdminUser)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
-
-    // ... More tests can be added here for different scenarios
   });
 
   describe('findOneById', () => {
@@ -107,8 +106,6 @@ describe('UsersService', () => {
       const result = await service.findOneById(1);
       expect(result).toEqual(mockUser);
     });
-
-    // ... More tests can be added here for different scenarios
   });
 
   describe('findAll', () => {
@@ -119,9 +116,5 @@ describe('UsersService', () => {
       const result = await service.findAll();
       expect(result).toEqual(mockUsers);
     });
-
-    // ... More tests can be added here for different scenarios
   });
-
-  // Add tests for the testing-specific methods if needed
 });

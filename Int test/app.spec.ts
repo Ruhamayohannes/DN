@@ -5,7 +5,6 @@ import { AppController } from '../src/app.controller';
 import { AppService } from '../src/app.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserRepository } from '../src/users/users.repository';
-import { User } from '../src/users/entities/user.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

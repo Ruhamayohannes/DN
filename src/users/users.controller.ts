@@ -1,4 +1,4 @@
-import { Controller, NotFoundException, ForbiddenException, Get, Post, Body, UseGuards, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, NotFoundException, ForbiddenException, Get, Post, Body, UseGuards, Patch, Param, Delete} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -20,7 +20,11 @@ export class UsersController {
   static findOne(userId: string) {
     throw new Error('Method not implemented.');
   }
-  static update(userId: string, updateUserDto: UpdateUserDto, currentUser: User) {
+  static update(
+    userId: string,
+    updateUserDto: UpdateUserDto,
+    currentUser: User,
+  ) {
     throw new Error('Method not implemented.');
   }
   static remove(userId: string, currentUser: User) {
@@ -30,7 +34,10 @@ export class UsersController {
 
   @Post()
   @Roles(Role.Admin, Role.User)
-  async create(@Body() createUserDto: CreateUserDto, @CurrentUser() currentUser: User) {
+  async create(
+    @Body() createUserDto: CreateUserDto,
+    @CurrentUser() currentUser: User,
+  ) {
     const newUser = await this.usersService.create(createUserDto);
     return { user: newUser, message: 'User created successfully' };
   }
@@ -55,22 +62,31 @@ export class UsersController {
 
   @Patch(':id')
   @Roles(Role.Admin, Role.User)
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @CurrentUser() currentUser: User) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @CurrentUser() currentUser: User,
+  ) {
     const userId = +id;
 
     try {
-      const updatedUser = await this.usersService.update(userId, updateUserDto, currentUser);
+      const updatedUser = await this.usersService.update(
+        userId,
+        updateUserDto,
+        currentUser,
+      );
       return { user: updatedUser, message: 'User updated successfully' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(`User with ID ${id} not found`);
       } else if (error instanceof ForbiddenException) {
-        throw new ForbiddenException('You do not have permission to update this account.');
+        throw new ForbiddenException(
+          'You do not have permission to update this account.',
+        );
       } else {
         throw error;
       }
     }
-    
   }
 
   @Delete(':id')
@@ -85,7 +101,9 @@ export class UsersController {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(`User with ID ${id} not found`);
       } else if (error instanceof ForbiddenException) {
-        throw new ForbiddenException('You do not have permission to delete this account.');
+        throw new ForbiddenException(
+          'You do not have permission to delete this account.',
+        );
       } else {
         throw error;
       }

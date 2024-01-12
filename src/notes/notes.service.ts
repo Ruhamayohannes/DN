@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {Injectable, NotFoundException, ForbiddenException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NoteRepository } from './notes.repository';  // Import the repository
+import { NoteRepository } from './notes.repository';
 import { Note } from './entities/note.entity';
 import { User } from '../users/entities/user.entity';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -11,7 +11,7 @@ export class NoteService {
     throw new Error('Method not implemented.');
   }
   constructor(
-    @InjectRepository(NoteRepository)  // Inject the repository
+    @InjectRepository(NoteRepository)
     private readonly noteRepository: NoteRepository,
   ) {}
 
@@ -43,22 +43,24 @@ export class NoteService {
     return note;
   }
 
-  async update(user: User, noteId: number, title: string, content: string): Promise<Note> {
+  async update(
+    user: User,
+    noteId: number,
+    title: string,
+    content: string,
+  ): Promise<Note> {
     const note = await this.findNoteById(noteId);
     this.checkUserPermission(user, note);
 
-    // Update note properties
     note.title = title;
     note.content = content;
 
-    // Save the updated note
     return this.noteRepository.save(note);
   }
 
   async remove(user: User, noteId: number): Promise<void> {
     const note = await this.findNoteById(noteId);
 
-    // Check if the user has permission to delete this note
     this.checkUserPermission(user, note);
 
     await this.noteRepository.remove(note);
@@ -74,11 +76,11 @@ export class NoteService {
     return note;
   }
 
-
   private checkUserPermission(user: User, note: Note): void {
-    // Check if the user has permission to access or modify this note
     if (user.role === 'User' && note.user.id !== user.id) {
-      throw new ForbiddenException('You do not have permission to access or modify this note.');
+      throw new ForbiddenException(
+        'You do not have permission to access or modify this note.',
+      );
     }
   }
 }

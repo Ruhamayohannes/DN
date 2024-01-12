@@ -1,5 +1,4 @@
-// users/dto/create-user.dto.ts
-import { IsNotEmpty, IsEmail, IsString, IsIn, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString, IsIn, IsOptional} from 'class-validator';
 import { Role } from '../entities/role.enum';
 
 export class CreateUserDto {

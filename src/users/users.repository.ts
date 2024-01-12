@@ -1,4 +1,3 @@
-// users.repository.ts
 import { EntityRepository, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { NotFoundException } from '@nestjs/common';
@@ -45,8 +44,6 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  // Methods for testing
-
   async findOneByEmailForTesting(email: string): Promise<User | undefined> {
     return this.findOne({ where: { email } });
   }
@@ -57,7 +54,10 @@ export class UserRepository extends Repository<User> {
     return await this.save(newUser);
   }
 
-  async updateUserForTesting(user: User, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateUserForTesting(
+    user: User,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User> {
     const { name, email, password, role } = updateUserDto;
     user.name = name || user.name;
     user.email = email || user.email;
@@ -73,6 +73,4 @@ export class UserRepository extends Repository<User> {
   async findOneByIdForTesting(id: number): Promise<User | undefined> {
     return this.findOneById(id);
   }
-
-  // Add more custom repository methods for testing if needed
 }

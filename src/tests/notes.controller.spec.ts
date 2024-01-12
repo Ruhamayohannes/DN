@@ -1,5 +1,3 @@
-// note.controller.spec.ts
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotesController } from '../notes/notes.controller';
 import { NoteService } from '../notes/notes.service';
@@ -215,7 +213,7 @@ describe('NotesController', () => {
         password: '',
       };
   
-      const noteId = 2; // Assuming this note belongs to another user
+      const noteId = 2; 
   
       const updateNoteDto: UpdateNoteDto = {
         title: 'Updated Note',
@@ -223,7 +221,7 @@ describe('NotesController', () => {
       };
   
       jest.spyOn(noteService, 'update').mockImplementation(() => {
-        // Simulate ForbiddenException by throwing it
+   
         throw new ForbiddenException('You do not have permission to update this note.');
       });
   
@@ -245,7 +243,6 @@ describe('NotesController', () => {
 
       const noteId = 1;
 
-      // Correct import and spy on the instance method
       const removeSpy = jest.spyOn(noteService, 'remove').mockResolvedValueOnce(undefined);
 
       const result = await noteController.remove(noteId.toString(), mockUser);
@@ -264,10 +261,10 @@ describe('NotesController', () => {
         password: '',
       };
 
-      const noteId = 2; // Assuming this note belongs to another user
+      const noteId = 2; 
 
       jest.spyOn(noteService, 'remove').mockImplementation(() => {
-        // Simulate ForbiddenException by throwing it
+      
         throw new ForbiddenException('You do not have permission to delete this note.');
       });
 

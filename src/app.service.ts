@@ -12,7 +12,7 @@ import { UserRepository } from './users/users.repository';
 export class AppService {
   constructor(
     @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository, // Use UserRepository instead of Repository<User>
+    private readonly userRepository: UserRepository,
   ) {}
 
   async create(data: any, isAdmin: boolean = false): Promise<User> {
@@ -20,15 +20,10 @@ export class AppService {
       data.role = isAdmin ? 'admin' : 'user';
       const newUser = await this.userRepository.save(data);
 
-      // Check if user is found before returning
       const foundUser = await this.findById(newUser.id);
 
       if (!foundUser) {
-        // Handle the case where the user is not found
         console.error('User not found after creation');
-        // You can choose to return newUser or handle the case differently
-        // For example, you might want to log the issue and still return newUser
-        // return newUser;
       }
 
       return foundUser || newUser;

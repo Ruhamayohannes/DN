@@ -40,20 +40,14 @@ describe('NotesController (e2e)', () => {
         .post('/notes')
         .send(noteData);
       expect(response.status).toBe(HttpStatus.CREATED);
-      // Additional assertions...
     });
-
-    // More tests for different scenarios and error cases
   });
 
   describe('GET /notes', () => {
     it('should return an array of notes', async () => {
       const response = await request(app.getHttpServer()).get('/notes');
       expect(response.status).toBe(HttpStatus.OK);
-      // Additional assertions...
     });
-
-    // More tests for different scenarios and error cases
   });
 
   describe('GET /notes/:id', () => {
@@ -63,10 +57,7 @@ describe('NotesController (e2e)', () => {
         `/notes/${noteId}`,
       );
       expect(response.status).toBe(HttpStatus.OK);
-      // Additional assertions...
     });
-
-    // Tests for not found, forbidden, etc.
   });
 
   describe('PATCH /notes/:id', () => {
@@ -77,10 +68,7 @@ describe('NotesController (e2e)', () => {
         .patch(`/notes/${noteId}`)
         .send(updateData);
       expect(response.status).toBe(HttpStatus.OK);
-      // Additional assertions...
     });
-
-    // Tests for not found, forbidden, invalid input, etc.
   });
 
   describe('DELETE /notes/:id', () => {
@@ -90,10 +78,7 @@ describe('NotesController (e2e)', () => {
         `/notes/${noteId}`,
       );
       expect(response.status).toBe(HttpStatus.OK);
-      // Additional assertions...
     });
-
-    // Tests for not found, forbidden, etc.
   });
 
   afterAll(async () => {

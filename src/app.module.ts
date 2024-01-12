@@ -6,10 +6,9 @@ import { User } from './users/entities/user.entity';
 import { Note } from './notes/entities/note.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from './users/users.module';
-import { RolesGuard } from './users/guards/roles.guard'; // Adjust the path accordingly
+import { RolesGuard } from './users/guards/roles.guard';
 import { NoteModule } from './notes/notes.module';
 import { UserRepository } from './users/users.repository';
-import { truncate } from 'fs/promises';
 
 @Module({
   imports: [
@@ -35,9 +34,6 @@ import { truncate } from 'fs/promises';
     AppModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    { provide: 'APP_GUARD', useClass: RolesGuard }, // Provide RolesGuard as a global guard
-  ],
+  providers: [AppService, { provide: 'APP_GUARD', useClass: RolesGuard }],
 })
 export class AppModule {}

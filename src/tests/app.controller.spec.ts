@@ -28,7 +28,9 @@ describe('AppController', () => {
 
   describe('register', () => {
     it('should throw BadRequestException if required fields are missing', async () => {
-      await expect(appController.register('', '', '', '')).rejects.toThrow(BadRequestException);
+      await expect(appController.register('', '', '', '')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should successfully register a user', async () => {
@@ -42,12 +44,15 @@ describe('AppController', () => {
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
       jest.spyOn(appService, 'create').mockResolvedValue(user);
 
-      const result = await appController.register('John Doe', 'john@example.com', 'password123', 'user');
+      const result = await appController.register(
+        'John Doe',
+        'john@example.com',
+        'password123',
+        'user',
+      );
       expect(result).toEqual(user);
     });
   });
-
-  // Implementation of the register method in AppController
 
   describe('login', () => {
     it('should throw BadRequestException for invalid email', async () => {
@@ -67,7 +72,9 @@ describe('AppController', () => {
       const password = 'invalidPassword';
       const response: Partial<Response> = { cookie: jest.fn() };
 
-      jest.spyOn(appService, 'findOne').mockResolvedValue({ email, password: 'hashedPassword' } as User);
+      jest
+        .spyOn(appService, 'findOne')
+        .mockResolvedValue({ email, password: 'hashedPassword' } as User);
       jest.spyOn(bcrypt, 'compare').mockResolvedValue(false as never);
 
       await expect(
@@ -80,14 +87,24 @@ describe('AppController', () => {
       const password = 'validPassword';
       const response: Partial<Response> = { cookie: jest.fn() };
 
-      jest.spyOn(appService, 'findOne').mockResolvedValue({ email, password: 'hashedPassword' } as User);
+      jest
+        .spyOn(appService, 'findOne')
+        .mockResolvedValue({ email, password: 'hashedPassword' } as User);
       jest.spyOn(bcrypt, 'compare').mockResolvedValue(true as never);
       jest.spyOn(jwtService, 'signAsync').mockResolvedValue('jwtToken');
 
-      const result = await appController.login(email, password, response as Response);
+      const result = await appController.login(
+        email,
+        password,
+        response as Response,
+      );
 
-      expect(result).toEqual({ message: 'Logged in successfully' }); // Updated to match the controller's response
-      expect(response.cookie).toHaveBeenCalledWith('jwt', 'jwtToken', expect.any(Object));
+      expect(result).toEqual({ message: 'Logged in successfully' });
+      expect(response.cookie).toHaveBeenCalledWith(
+        'jwt',
+        'jwtToken',
+        expect.any(Object),
+      );
     });
     it('should throw BadRequestException for invalid email', async () => {
       const email = 'nonexistent@example.com';
@@ -106,7 +123,9 @@ describe('AppController', () => {
       const password = 'invalidPassword';
       const response: Partial<Response> = { cookie: jest.fn() };
 
-      jest.spyOn(appService, 'findOne').mockResolvedValue({ email, password: 'hashedPassword' } as User);
+      jest
+        .spyOn(appService, 'findOne')
+        .mockResolvedValue({ email, password: 'hashedPassword' } as User);
       jest.spyOn(bcrypt, 'compare').mockResolvedValue(false as never);
 
       await expect(
@@ -115,7 +134,6 @@ describe('AppController', () => {
     });
   });
 
-   
   describe('user', () => {
     it('should get user information successfully', async () => {
       const request: Partial<Request> = { cookies: { jwt: 'validToken' } };
@@ -126,7 +144,9 @@ describe('AppController', () => {
       userData.password = 'hashedPassword';
       userData.role = 'user';
 
-      jest.spyOn(jwtService, 'verifyAsync').mockResolvedValue({ id: userData.id });
+      jest
+        .spyOn(jwtService, 'verifyAsync')
+        .mockResolvedValue({ id: userData.id });
       jest.spyOn(appService, 'findOne').mockResolvedValue(userData);
 
       const result = await appController.user(request as Request);
@@ -137,7 +157,9 @@ describe('AppController', () => {
       const request: Partial<Request> = { cookies: { jwt: 'invalidToken' } };
       jest.spyOn(jwtService, 'verifyAsync').mockResolvedValue(null);
 
-      await expect(appController.user(request as Request)).rejects.toThrow(UnauthorizedException);
+      await expect(appController.user(request as Request)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 
@@ -150,6 +172,4 @@ describe('AppController', () => {
       expect(response.clearCookie).toHaveBeenCalledWith('jwt');
     });
   });
-
-  // Add more tests for other methods if needed
 });
